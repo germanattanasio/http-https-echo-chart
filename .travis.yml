@@ -1,0 +1,36 @@
+---
+language: python
+dist: xenial
+env:
+  global:
+    - HELM_URL=https://storage.googleapis.com/kubernetes-helm
+    - HELM_TGZ=helm-v2.13.1-linux-amd64.tar.gz
+    - YAMLLINT_VERSION=1.8.1
+install:
+  # Installing Helm
+  - wget -q ${HELM_URL}/${HELM_TGZ}
+  - tar xzfv ${HELM_TGZ}
+  - PATH=`pwd`/linux-amd64/:$PATH
+  - helm init --client-only
+  # Installig pip deps
+  - sudo pip install yamllint=="${YAMLLINT_VERSION}"
+
+script:
+  # Check charts format
+  - helm lint $TRAVIS_BUILD_DIR
+  # Check YAML styling
+  - yamllint -c .yamllint.yaml -s $(find . -type f -name "Chart.yaml")
+  - yamllint -c .yamllint.yaml -s $(find . -type f -name "values.yaml")
+
+before_deploy:
+- pip install bumpversion
+- npm install @semantic-release/exec
+- npm install @semantic-release/changelog
+- npm install @semantic-release/github
+
+deploy:
+- provider: script
+  script: npx semantic-release
+  skip_cleanup: true
+  on:
+    branch: master

@@ -1,0 +1,25 @@
+{
+  "branch": "master",
+  "verifyConditions": [
+    "@semantic-release/changelog",
+    "@semantic-release/github"
+  ],
+  "prepare": [
+    "@semantic-release/changelog",
+    {
+      "path": "@semantic-release/exec",
+      "cmd": "bumpversion --new-version ${nextRelease.version} patch"
+    },
+    {
+      "path": "@semantic-release/exec",
+      "cmd": "helm package ."
+    }
+  ],
+  "publish": [
+    ["@semantic-release/github", {
+      "assets": [
+        {"path": "ibm-wcn-addon-${nextRelease.version}.tgz"}
+      ]
+    }]
+  ]
+}
