@@ -1,4 +1,5 @@
 # http-https-echo-chart 🇦🇷
+[![Build Status](https://travis-ci.org/germanattanasio/http-https-echo-chart.svg?branch=master)](https://travis-ci.org/germanattanasio/http-https-echo-chart)
 
 This helm chart deploys the [`http-https-echo`](https://github.com/mendhak/docker-http-https-echo) docker image to a kubernetes environment.
 
