@@ -1,0 +1,15 @@
+apiVersion: securityenforcement.admission.cloud.ibm.com/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: {{ include "http-https-echo.name" . }}-clusterpolicy
+  labels:
+    app.kubernetes.io/name: {{ include "http-https-echo.name" . }}
+    helm.sh/chart: {{ include "http-https-echo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  repositories:
+  - name: "mycluster.icp:8500/*"
+    policy:
+      va:
+        enabled: false
